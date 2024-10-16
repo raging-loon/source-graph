@@ -11,6 +11,10 @@ namespace source_graph
 using uint = unsigned int;
 using VertexList = std::vector<uint>;
 
+///
+/// @brief
+///     Directed Graph using an adjacency list
+/// 
 class Graph
 {
 public:
@@ -18,13 +22,27 @@ public:
     Graph();
     ~Graph();
 
+    ///
+    /// @brief
+    ///     Add/update vertex list at F
+    /// 
     void addVertex(uint f, uint t);
     
+    ///
+    /// @brief
+    ///     Check if "vertex" is a node
+    /// 
     bool hasEdges(uint vertex);
 
-    std::optional<
-        const VertexList
-    > getVertices(uint vertex);
+
+    ///
+    /// @brief
+    ///     Get vertex list for vertex.
+    /// 
+    /// @return
+    ///     std::nullopt on failure
+    /// 
+    std::optional<const VertexList> getVertices(uint vertex);
 
 private:
 

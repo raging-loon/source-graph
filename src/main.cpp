@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 #include "graph/IncludeGraph.h"
+#include "analyzer/IncludeAnalyzer.h"
 using namespace source_graph;
 using std::filesystem::path;
 int main(int argc, char** argv)
@@ -14,64 +15,12 @@ int main(int argc, char** argv)
     IncludeGraph sourcegraph;
 
     auto cur = std::filesystem::current_path();
-    std::filesystem::current_path("D:/source-graph/src");
-    FileList f("./");
+    std::filesystem::current_path("D:/simula-24/simula24");
+    FileList f(".");
     int iter = 0;
-    auto copy = f.getFileList();
-    for (auto &file : copy)
-    {
-        std::ifstream source(file);
-        std::string line;
-        while (std::getline(source, line))
-        {
-            if (line.starts_with("#include"))
-            {
-                std::cout << "Found include: " << line << "\t\tin " << file.string() << std::endl;
-                if (line.rfind(">") != std::string::npos && line.rfind(".h") == std::string::npos)
-                {
-                    int len = line.find(">") - line.find("<")+1;
-                    std::string p = line.substr(line.find("<"),len);
-                    int index = 0;
-                    for (auto& file2 : f.getFileList())
-                    {
-                        if (file2.string() == p)
-                        {
-                            sourcegraph.addInclude(iter, index);
-                            index = -1;
-                            break;
-                        }
-                        index++;
-                    }
-                    if (index != -1)
-                    {
-                        sourcegraph.addInclude(iter, f.getNumFiles());
-                        f.addFile(p);
-                    }
 
-                }
-                else
-                {
-                    std::string s;
-                    //s += "D:\\source-graph\\src\\";
-                    s += line.substr(line.find("\"") + 1, line.length() - line.find("\"") - 2);
-                    std::replace(s.begin(), s.end(), '/', '\\');
-                    int index = 0;
-                    for (auto& file2 : f.getFileList())
-                    {
-                        if (file2.string() == s)
-                        {
-                            sourcegraph.addInclude(iter, index);
-                            break;
-                        }
-                        index++;
-                    }
-                }
-                
-            }
-
-        }
-        iter++;
-    }
+    IncludeAnalyzer ia(f, sourcegraph);
+    ia.analyze();
 
     for (int i = 0; i < f.getNumFiles(); i++)
     {

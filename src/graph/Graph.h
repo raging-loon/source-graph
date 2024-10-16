@@ -23,8 +23,8 @@ public:
     bool hasEdges(uint vertex);
 
     std::optional<
-        const VertexList>
-        getVertices(uint vertex);
+        const VertexList
+    > getVertices(uint vertex);
 
 private:
 

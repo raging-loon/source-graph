@@ -1,4 +1,4 @@
-#include "Graph.h"
+#include "graph/Graph.h"
 
 using source_graph::Graph;
 using source_graph::uint;

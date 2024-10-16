@@ -16,4 +16,7 @@ project ("source-graph")
 
 add_executable(source-graph
     src/main.cpp
- "src/graph/Graph.h" "src/graph/Graph.cpp")
+ "src/graph/Graph.h" "src/graph/Graph.cpp" "src/parser/FileList.h" "src/parser/FileList.cpp" "src/analyzer/IncludeAnalyzer.h" "src/graph/IncludeGraph.h" "src/graph/IncludeGraph.cpp")
+
+
+target_include_directories(source-graph PRIVATE "./src")

@@ -1,0 +1,7 @@
+#ifndef SG_ANALYZER_INCLUDE_ANALYZER_H_
+#define SG_ANALYZER_INCLUDE_ANALYZER_H_
+
+#include "graph/Graph.h"
+
+
+#endif // SG_ANALYZER_INCLUDE_ANALYZER_H_

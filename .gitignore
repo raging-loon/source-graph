@@ -39,6 +39,7 @@ bin/
 .vscode/
 
 ### Mac OS ###
-.
+.vs/
+out/
 .idea/
 gradle/wrapper/

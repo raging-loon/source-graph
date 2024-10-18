@@ -1,0 +1,5 @@
+#ifndef SG_OUTPUT_DOT_FILE_H_
+#define SG_OUTPUT_DOT_FILE_H_
+
+
+#endif // SG_OUTPUT_DOT_FILE_H_

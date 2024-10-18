@@ -13,6 +13,8 @@ int IncludeAnalyzer::analyze()
 
     for (auto& filename : copy.getFileList())
     {
+        printf("Analyzing: %s\n",filename.string().c_str());
+        ++m_numFilesAnalyzed;
         if (filename.string().ends_with(".txt"))
         {
             curFileIdx++;
@@ -21,8 +23,10 @@ int IncludeAnalyzer::analyze()
         std::ifstream file(filename);
         while (std::getline(file, line))
         {
+            ++m_linesCounted;
             if (line.starts_with("#include"))
             {
+                ++m_pdepFound;
                 char startChar, endChar;
                 if (line.find('"') != std::string::npos)
                 {
@@ -60,7 +64,10 @@ int IncludeAnalyzer::analyze()
                 if (incIdx == m_outList.getNumFiles())
                 {
                     if (!incname.ends_with(".h"))
+                    {
+                        ++m_systemHeadersFound;
                         incname = "<" + incname + ">";
+                    }
                     m_outGraph.addInclude(curFileIdx, m_outList.getNumFiles());
                     m_outList.addFile(incname);
                 }

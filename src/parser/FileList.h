@@ -12,7 +12,7 @@ class FileList
 {
 public:
 
-    FileList(const std::string& path);
+    FileList();
 
     const path& getBasePath() const { return m_basepath; }
 

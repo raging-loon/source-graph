@@ -4,25 +4,30 @@
 
 using source_graph::FileList;
 using namespace std::filesystem;
-FileList::FileList(const std::string& path)
-    : m_basepath(path)
+FileList::FileList()
 {
-    for (auto const& entry : std::filesystem::recursive_directory_iterator{ m_basepath })
-    {
-        if (!entry.is_directory())
-            m_list.push_back(entry.path());
-    }
+
 }
 
 int FileList::addDirectory(const path& p)
 {
-    if (!is_directory(p))
-        return -1;
-    size_t csize = m_list.size();
+
+printf("%s\n",p.string().c_str());
     for (auto const& entry : std::filesystem::recursive_directory_iterator{ p })
     {
         if (!entry.is_directory())
-            m_list.push_back(entry.path());
+        {
+            
+            auto ext = entry.path().extension();
+            if (ext == ".cpp" || ext == ".h" || ext == ".c" ||
+                ext == ".cxx" || ext == ".hpp" || ext == ".c++" ||
+                ext == ".h++")
+            {
+                addFile(std::filesystem::relative(entry.path(), p));
+            }
+        }
+
     }
-    return m_list.size() - csize;
+
+    return getNumFiles();
 }

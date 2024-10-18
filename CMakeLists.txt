@@ -10,13 +10,13 @@ if (POLICY CMP0141)
 endif()
 
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_C_STANDARD 20)
 
 project ("source-graph")
 
 add_executable(source-graph
     src/main.cpp
- "src/graph/Graph.h" "src/graph/Graph.cpp" "src/parser/FileList.h" "src/parser/FileList.cpp" "src/analyzer/IncludeAnalyzer.h" "src/graph/IncludeGraph.h" "src/graph/IncludeGraph.cpp" "src/analyzer/IncludeAnalyzer.cpp")
+ "src/graph/Graph.h" "src/graph/Graph.cpp" "src/parser/FileList.h" "src/parser/FileList.cpp" "src/analyzer/IncludeAnalyzer.h" "src/graph/IncludeGraph.h" "src/graph/IncludeGraph.cpp" 
+ "src/analyzer/IncludeAnalyzer.cpp" "src/output/DOTFile.h" "src/cli/TerminalInterface.h" "src/cli/TerminalInterface.cpp")
 
 
 target_include_directories(source-graph PRIVATE "./src")

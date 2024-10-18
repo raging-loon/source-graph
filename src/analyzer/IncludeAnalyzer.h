@@ -22,6 +22,7 @@ public:
     
     int analyze();
     
+    inline int getNumFilesAnalyzed() const { return m_numFilesAnalyzed; }
 
 
 private:

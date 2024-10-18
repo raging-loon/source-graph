@@ -31,3 +31,24 @@ printf("%s\n",p.string().c_str());
 
     return getNumFiles();
 }
+
+std::vector<size_t> FileList::getIndexListFromNames(const std::vector<path>& names)
+{
+    std::vector<size_t> indexList{};
+
+    int startIndex = 0;
+
+    for (int i = 0; i < m_list.size(); i++)
+    {
+        for (int j = startIndex; j < names.size(); j++)
+        {
+            if (names[j].string() == m_list[i].string())
+            {
+                indexList.push_back(i);
+                startIndex++;
+            }
+        }
+    }
+
+    return indexList;
+}

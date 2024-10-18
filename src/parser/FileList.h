@@ -8,6 +8,16 @@
 namespace source_graph
 {
 using std::filesystem::path;
+
+
+///
+/// @brief
+///     Holds a list of std::filesystem::path objects
+///     
+///     Operations include
+///         - adding files/directories
+///         - obtaining indexes/index lists
+/// 
 class FileList
 {
 public:
@@ -19,10 +29,22 @@ public:
     auto& getFileList()  { return m_list; }
 
     int addDirectory(const path& p);
+    
     void addFile(const path& p) { m_list.push_back(p); }
+    
     size_t getNumFiles() { return m_list.size(); }
+
+    std::vector<size_t> getIndexListFromNames(const std::vector<path>& names);
+
+    const path& operator[](size_t idx)
+    {
+        return m_list[idx];
+    }
+
 private:
+    
     std::vector<path> m_list;
+    
     path m_basepath;
 };
 

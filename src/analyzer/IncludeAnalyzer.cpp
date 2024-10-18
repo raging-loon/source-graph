@@ -13,7 +13,6 @@ int IncludeAnalyzer::analyze()
 
     for (auto& filename : copy.getFileList())
     {
-        printf("Analyzing: %s\n",filename.string().c_str());
         ++m_numFilesAnalyzed;
         if (filename.string().ends_with(".txt"))
         {

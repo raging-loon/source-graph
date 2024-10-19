@@ -5,7 +5,6 @@
 #include "parser/FileList.h"
 #include "graph/IncludeGraph.h"
 
-
 namespace source_graph
 {
 
@@ -23,7 +22,7 @@ public:
     int analyze();
     
     inline int getNumFilesAnalyzed() const { return m_numFilesAnalyzed; }
-
+    inline int getLinesCounted() const { return m_linesCounted; }
 
 private:
 

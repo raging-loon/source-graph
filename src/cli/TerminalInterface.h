@@ -4,7 +4,6 @@
 #include <string>
 #include "parser/FileList.h"
 #include "graph/IncludeGraph.h"
-
 namespace source_graph
 {
 
@@ -36,9 +35,7 @@ public:
 
     /// parse cmd args
     bool parse();
-
-    bool validate();
-
+    
     /// run analyzers
     bool run();
 
@@ -52,6 +49,9 @@ private:
 
     /// parse a list of target files i.e -f <arg>
     bool parseTargetFiles(const char* arg);
+
+    bool runAnalyzer();
+
 
     // copies provided from main function
     int m_argc;

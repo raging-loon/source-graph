@@ -11,6 +11,7 @@
 #include "utils.h"
 
 #include "output/TerminalOutput.h"
+#include "analyzer/CircularInclusionAnalyzer.h"
 
 using source_graph::TerminalInterface;
 using namespace std::chrono;
@@ -24,6 +25,11 @@ static constexpr bool hasArg(char** argv, int idx, int totalLen)
 static inline void printArgRequirment(const char* arg)
 {
     printf("%s requires an argument\n", arg);
+}
+
+constexpr bool hasFlag(unsigned int value, unsigned int flag)
+{
+    return (value & flag) == flag;
 }
 
 
@@ -77,10 +83,6 @@ bool TerminalInterface::parse()
     return parseArgs();
 }
 
-bool TerminalInterface::validate()
-{
-    return false;
-}
 
 bool TerminalInterface::run()
 {
@@ -89,8 +91,6 @@ bool TerminalInterface::run()
         std::cerr << "Need at least one directory and one analyzer.\n";
         return false;
     }
-
-
     IncludeAnalyzer ia(m_sourceList, m_igraph);
     time_point<steady_clock> start{ steady_clock::now() };
     if (ia.analyze() != 0)
@@ -100,10 +100,19 @@ bool TerminalInterface::run()
     }
     auto time = duration_cast<milliseconds>(steady_clock::now() - start).count();
     
-    std::cerr << std::format("Analyzed {} files in {}s\n", ia.getNumFilesAnalyzed(), time/1000.f);
-    TerminalOuput::dumpReverseIncludes(m_fileList, m_sourceList, m_igraph);
+    std::cerr << std::format("Analyzed {} files ({} lines) in {}s\n", ia.getNumFilesAnalyzed(), ia.getLinesCounted(), time/1000.f);
+    
+
+
+
     return true;
 }
+
+
+
+
+
+
 
 bool TerminalInterface::parseArgs()
 {
@@ -184,4 +193,13 @@ bool TerminalInterface::parseTargetFiles(const char* arg)
     }
 
     return false;
+}
+
+bool TerminalInterface::runAnalyzer()
+{
+    if (hasFlag(m_analyzers, ANALYZER_FORWARD))
+    {
+
+    }
+
 }

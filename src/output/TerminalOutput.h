@@ -8,7 +8,7 @@ namespace source_graph
 {
 
 
-class TerminalOuput
+class TerminalOutput
 {
 public:
 

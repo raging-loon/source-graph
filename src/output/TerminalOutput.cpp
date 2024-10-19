@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace source_graph;
 
-void TerminalOuput::dumpForwardIncludes(FileList& files, FileList& sources, IncludeGraph& graph)
+void TerminalOutput::dumpForwardIncludes(FileList& files, FileList& sources, IncludeGraph& graph)
 {
     auto indexList = sources.getIndexListFromNames(files.getFileList());
     for (auto& i : indexList)
@@ -20,7 +20,7 @@ void TerminalOuput::dumpForwardIncludes(FileList& files, FileList& sources, Incl
     }
 }
 
-void TerminalOuput::dumpReverseIncludes(FileList& files, FileList& sources, IncludeGraph& graph)
+void TerminalOutput::dumpReverseIncludes(FileList& files, FileList& sources, IncludeGraph& graph)
 {
     auto indexList = sources.getIndexListFromNames(files.getFileList());
     for (auto& i : indexList)

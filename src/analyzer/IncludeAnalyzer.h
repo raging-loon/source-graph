@@ -4,7 +4,7 @@
 #include "graph/Graph.h"
 #include "parser/FileList.h"
 #include "graph/IncludeGraph.h"
-
+#include <atomic>
 namespace source_graph
 {
 
@@ -26,13 +26,15 @@ public:
 
 private:
 
+    int mtAnalyze(int startIdx, int endIdx, const FileList& copy);
+
     FileList& m_outList;
     IncludeGraph& m_outGraph;
-    int m_numFilesAnalyzed;
-    int m_linesCounted;
-    int m_locCounted;
-    int m_pdepFound;
-    int m_systemHeadersFound;
+    std::atomic<int> m_numFilesAnalyzed;
+    std::atomic<int> m_linesCounted;
+    std::atomic<int> m_locCounted;
+    std::atomic<int> m_pdepFound;
+    std::atomic<int> m_systemHeadersFound;
 };
 
 } // source_graph

@@ -1,9 +1,11 @@
 #include "graph/IncludeGraph.h"
+#include <thread>
 using source_graph::IncludeGraph;
 using source_graph::VertexList;
 
 void IncludeGraph::addInclude(uint fidx1, uint fidx2)
 {
+    std::lock_guard lock(m_mtx);
     m_fwdIncGraph.addVertex(fidx1, fidx2);
     m_revIncGraph.addVertex(fidx2, fidx1);
 }

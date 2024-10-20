@@ -1,17 +1,20 @@
 #include "parser/FileList.h"
 
 #include <filesystem>
-
+#include <mutex>
 using source_graph::FileList;
 using source_graph::FileIndexList;
 using namespace std::filesystem;
 FileList::FileList()
+    : m_mtx{}
 {
 
 }
 
 int FileList::addDirectory(const path& p)
 {
+    std::lock_guard lock(m_mtx);
+
     for (auto const& entry : std::filesystem::recursive_directory_iterator{ p })
     {
         if (!entry.is_directory())
@@ -22,13 +25,13 @@ int FileList::addDirectory(const path& p)
                 ext == ".cxx" || ext == ".hpp" || ext == ".c++" ||
                 ext == ".h++")
             {
-                addFile(std::filesystem::relative(entry.path(), p));
+                m_list.push_back(std::filesystem::relative(entry.path(), p));
             }
         }
 
     }
 
-    return getNumFiles();
+    return m_list.size();
 }
 
 FileIndexList FileList::getIndexListFromNames(const std::vector<path>& names)
@@ -51,7 +54,7 @@ FileIndexList FileList::getIndexListFromNames(const std::vector<path>& names)
 
 FileIndexList FileList::getIndexList() const
 {
-    FileIndexList ilist(m_list.size());
+    FileIndexList ilist{};
 
     for (int i = 0; i < m_list.size(); i++)
         ilist.push_back(i);

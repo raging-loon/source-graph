@@ -3,6 +3,7 @@
 
 #include "graph/Graph.h"
 #include <optional>
+#include <mutex>
 
 namespace source_graph
 {
@@ -16,7 +17,7 @@ class IncludeGraph
 public:
 
     IncludeGraph() 
-        : m_fwdIncGraph{}, m_revIncGraph{} {}
+        : m_fwdIncGraph{}, m_revIncGraph{}, m_mtx{} {}
 
     ///
     /// @brief 
@@ -49,6 +50,8 @@ private:
 
     /// What includes a file
     Graph m_revIncGraph;
+
+    std::mutex m_mtx;
 };
 
 } // source_graph

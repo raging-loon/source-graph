@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include <filesystem>
-
+#include <mutex>
 namespace source_graph
 {
 using std::filesystem::path;
@@ -23,7 +23,13 @@ class FileList
 public:
 
     FileList();
-
+    FileList(const FileList& other)
+        : m_list(other.m_list) {}
+    FileList& operator=(const FileList& other)
+    {
+        m_list = other.m_list;
+        return *this;
+    }
     /// 
     /// @brief
     ///     recursively add all files in a directory
@@ -31,10 +37,16 @@ public:
     ///     Number of files added
     int addDirectory(const path& p);
     
-    void addFile(const path& p) { m_list.push_back(p); }
+    void addFile(const path& p) {
+        std::lock_guard lock(m_mtx);
+        m_list.push_back(p); 
+    }
     
-    size_t getNumFiles() const { return m_list.size(); }
+    size_t getNumFiles()  {
+        std::lock_guard lock(m_mtx);
 
+        return m_list.size();
+    }
     const path& getBasePath() const { return m_basepath; }
 
     const auto& getFileList() const { return m_list; }
@@ -51,12 +63,21 @@ public:
     FileIndexList getIndexList() const;
 
 
-    const path& operator[](size_t idx) const { return m_list[idx]; }
+    const path& operator[](size_t idx) const { 
+        return m_list[idx]; 
+    }
+
+
+    const path& operator[](size_t idx) {
+        std::lock_guard lock(m_mtx);
+
+        return m_list[idx];
+    }
 
 private:
     
     std::vector<path> m_list;
-    
+    std::mutex m_mtx;
     path m_basepath;
 };
 

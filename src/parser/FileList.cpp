@@ -45,7 +45,6 @@ std::vector<size_t> FileList::getIndexListFromNames(const std::vector<path>& nam
             if (names[j].string() == m_list[i].string())
             {
                 indexList.push_back(i);
-                startIndex++;
             }
         }
     }

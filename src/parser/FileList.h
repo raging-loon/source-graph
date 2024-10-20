@@ -8,7 +8,7 @@
 namespace source_graph
 {
 using std::filesystem::path;
-
+using FileIndexList =  std::vector<int>;
 
 ///
 /// @brief
@@ -36,7 +36,7 @@ public:
 
     std::vector<size_t> getIndexListFromNames(const std::vector<path>& names);
 
-    const path& operator[](size_t idx)
+    const path& operator[](size_t idx) const
     {
         return m_list[idx];
     }

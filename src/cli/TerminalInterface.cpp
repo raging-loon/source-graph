@@ -10,7 +10,7 @@
 
 #include "utils.h"
 
-#include "output/TerminalOutput.h"
+#include "output/TerminalStrategy.h"
 #include "analyzer/CircularInclusionAnalyzer.h"
 
 using source_graph::TerminalInterface;
@@ -102,7 +102,10 @@ bool TerminalInterface::run()
     
     std::cerr << std::format("Analyzed {} files ({} lines) in {}s\n", ia.getNumFilesAnalyzed(), ia.getLinesCounted(), time/1000.f);
     
+    CircularInclusionAnalyzer c(m_sourceList, m_igraph);
+    TerminalStrategy t;
 
+    t.writeTransitiveInclude(m_sourceList, c.findIndirectCircularIncludes(13, 15, 0));
 
 
     return true;
@@ -201,5 +204,7 @@ bool TerminalInterface::runAnalyzer()
     {
 
     }
+
+    return true;
 
 }

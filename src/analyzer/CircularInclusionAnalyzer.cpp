@@ -64,6 +64,6 @@ std::vector<int> CircularInclusionAnalyzer::findIndirectCircularIncludes(int fil
         file = touched[file];
     }
     pathTofile2.push_back(file1);
-
+    std::reverse(pathTofile2.begin(), pathTofile2.end());
     return pathTofile2;
 }

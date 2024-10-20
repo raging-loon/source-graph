@@ -43,7 +43,6 @@ bin/
 out/
 .idea/
 gradle/wrapper/
-*.png
 *.dot
 *.gv
 *.cmake

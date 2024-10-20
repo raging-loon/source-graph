@@ -65,7 +65,7 @@ int IncludeAnalyzer::mtAnalyze(int startIdx, int endIdx, const FileList& copy)
                 }
                 else if(line.rfind('>') != std::string::npos)
                 {
-                    soffset = 0; eoffset = -1;
+                    soffset = 1; eoffset = 1;
                     startChar = '<';
                     endChar = '>';
                 }

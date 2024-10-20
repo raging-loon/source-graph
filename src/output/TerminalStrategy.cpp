@@ -16,7 +16,8 @@ void TerminalStrategy::writeForwardIncludes(const FileList& sources, const FileI
         {
             std::cerr << "Includes: \n";
             for (auto idx : list.value())
-                std::cerr << std::format("\t{}\n", sources[idx].string());
+                std::cerr << "\t" << sources[idx].string() << "\n";
+
         }
         std::cerr << std::string(amnt - 1, '-') << '\n';
     }
@@ -36,7 +37,7 @@ void TerminalStrategy::writeReverseIncludes(const FileList& sources, const FileI
         {
             std::cerr << "Included by: \n";
             for (auto idx : list.value())
-                std::cerr << std::format("\t{}\n", sources[idx].string());
+                std::cerr << "\t" << sources[idx].string() << "\n";
         }
         std::cerr << std::string(amnt - 1, '-') << '\n';
     }
@@ -44,7 +45,7 @@ void TerminalStrategy::writeReverseIncludes(const FileList& sources, const FileI
 
 void TerminalStrategy::writeTransitiveInclude(const FileList& sources, const FileIndexList& idx)
 {
-    if (idx.size() == 0)
+    if (idx.size() < 2)
     {
         std::cerr << "No path between files\n";
         return;

@@ -43,3 +43,11 @@ bin/
 out/
 .idea/
 gradle/wrapper/
+*.png
+*.dot
+*.gv
+*.cmake
+source-graph
+CMakeCache.txt
+CMakeFiles/
+Makefile

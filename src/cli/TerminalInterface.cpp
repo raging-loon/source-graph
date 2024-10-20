@@ -7,10 +7,10 @@
 #include "graph/IncludeGraph.h"
 #include "analyzer/IncludeAnalyzer.h"
 #include <chrono>
-
 #include "utils.h"
 
 #include "output/TerminalStrategy.h"
+#include "output/DotStrategy.h"
 #include "analyzer/CircularInclusionAnalyzer.h"
 
 using source_graph::TerminalInterface;
@@ -99,8 +99,9 @@ bool TerminalInterface::run()
         return false;
     }
     auto time = duration_cast<milliseconds>(steady_clock::now() - start).count();
-    
-    std::cerr << std::format("Analyzed {} files ({} lines) in {}s\n", ia.getNumFilesAnalyzed(), ia.getLinesCounted(), time/1000.f);
+    std::cerr << "Analyzed " << ia.getNumFilesAnalyzed() 
+              << " files ("<<ia.getLinesCounted()<<" lines) in "
+              <<time/1000.0f<<"s\n";
 
     return runAnalyzer();
 }
@@ -202,8 +203,8 @@ bool source_graph::TerminalInterface::parseOutputType(const char* arg)
 {
     if (strcmp(arg, "stdout") == 0)
         m_output = std::make_shared<TerminalStrategy>();
-    /*else if(strcmp(arg, "dot") == 0 || strcmp(arg, "graphviz") == 0)
-        m_output = std::make_shared<>();*/
+    else if(strcmp(arg, "dot") == 0 || strcmp(arg, "graphviz") == 0)
+        m_output = std::make_shared<DotStrategy>();
     else
     {
         std::cerr << "Unknown output type \"" << arg << "\". Valid options are 'stdout','dot', or 'graphviz'.\n";
@@ -216,12 +217,11 @@ bool source_graph::TerminalInterface::parseOutputType(const char* arg)
 // TODO: Figure out how to elimnate code dup. with fwd/rev analyzer
 bool TerminalInterface::runAnalyzer()
 {
-    TerminalStrategy os;
     if (hasFlag(m_analyzers, ANALYZER_FORWARD))
     {
         if (m_fileList.getNumFiles() == 0)
         {
-            os.writeForwardIncludes(
+            m_output->writeForwardIncludes(
                 m_sourceList,
                 m_sourceList.getIndexList(),
                 m_igraph
@@ -230,7 +230,7 @@ bool TerminalInterface::runAnalyzer()
         }
         else
         {
-            os.writeForwardIncludes(
+            m_output->writeForwardIncludes(
                 m_sourceList,
                 m_sourceList.getIndexListFromNames(m_fileList.getFileList()),
                 m_igraph
@@ -242,7 +242,7 @@ bool TerminalInterface::runAnalyzer()
     {
         if (m_fileList.getNumFiles() == 0)
         {
-            os.writeReverseIncludes(
+            m_output->writeReverseIncludes(
                 m_sourceList,
                 m_sourceList.getIndexList(),
                 m_igraph
@@ -251,7 +251,7 @@ bool TerminalInterface::runAnalyzer()
         }
         else
         {
-            os.writeReverseIncludes(
+            m_output->writeReverseIncludes(
                 m_sourceList,
                 m_sourceList.getIndexListFromNames(m_fileList.getFileList()),
                 m_igraph
@@ -274,7 +274,7 @@ bool TerminalInterface::runAnalyzer()
             printf("%zd\n",indexlist.size());
         else
         {
-            os.writeTransitiveInclude(
+            m_output->writeTransitiveInclude(
                 m_sourceList,
                 indexlist
             );

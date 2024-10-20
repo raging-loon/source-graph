@@ -16,8 +16,8 @@ project ("source-graph")
 add_executable(source-graph
     src/main.cpp
  "src/graph/Graph.h" "src/graph/Graph.cpp" "src/parser/FileList.h" "src/parser/FileList.cpp" "src/analyzer/IncludeAnalyzer.h" "src/graph/IncludeGraph.h" "src/graph/IncludeGraph.cpp" 
- "src/analyzer/IncludeAnalyzer.cpp" "src/output/DOTFile.h" "src/cli/TerminalInterface.h" "src/cli/TerminalInterface.cpp" "src/utils.h" "src/utils.cpp" "src/output/TerminalStrategy.h" 
- "src/output/TerminalStrategy.cpp" "src/analyzer/CircularInclusionAnalyzer.h" "src/analyzer/CircularInclusionAnalyzer.cpp" "src/output/OutputStrategy.h")
+ "src/analyzer/IncludeAnalyzer.cpp"  "src/cli/TerminalInterface.h" "src/cli/TerminalInterface.cpp" "src/utils.h" "src/utils.cpp" "src/output/TerminalStrategy.h" 
+ "src/output/TerminalStrategy.cpp" "src/analyzer/CircularInclusionAnalyzer.h" "src/analyzer/CircularInclusionAnalyzer.cpp" "src/output/OutputStrategy.h" "src/output/DotStrategy.h" "src/output/DotStrategy.cpp")
 
 
 target_include_directories(source-graph PRIVATE "./src")

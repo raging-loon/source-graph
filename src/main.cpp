@@ -17,8 +17,10 @@ using std::filesystem::path;
 int main(int argc, char** argv)
 {
     TerminalInterface tui(argc, argv);
-    tui.parse();
-    tui.run();
+    if (!tui.parse())
+        return -1;
+    if (!tui.run())
+        return -1;
 
     return 0;
 }

@@ -101,14 +101,8 @@ bool TerminalInterface::run()
     auto time = duration_cast<milliseconds>(steady_clock::now() - start).count();
     
     std::cerr << std::format("Analyzed {} files ({} lines) in {}s\n", ia.getNumFilesAnalyzed(), ia.getLinesCounted(), time/1000.f);
-    
-    CircularInclusionAnalyzer c(m_sourceList, m_igraph);
-    TerminalStrategy t;
 
-    t.writeTransitiveInclude(m_sourceList, c.findIndirectCircularIncludes(13, 15, 0));
-
-
-    return true;
+    return runAnalyzer();
 }
 
 
@@ -124,33 +118,39 @@ bool TerminalInterface::parseArgs()
         if (strcmp(m_argv[i], "-d") == 0)
         {
             CHECK_ARG("-d", m_argv, i, m_argc);
-            ++i;
-            if(!std::filesystem::exists(m_argv[i])) 
+            if(!std::filesystem::exists(m_argv[i + 1]))
             {
-                printf("%s not not found!\n", m_argv[i]);
+                printf("%s not not found!\n", m_argv[i + 1]);
                 return false;
             }
-            std::filesystem::current_path(m_argv[i]);
+            std::filesystem::current_path(m_argv[i+1]);
             m_sourceList.addDirectory(std::filesystem::current_path());
         }
         
         else if (strcmp(m_argv[i], "-a") == 0)
         {
             CHECK_ARG("-a", m_argv, i, m_argc);
-            ++i;
-            if (!parseAnalyzerArg(m_argv[i]))
+            if (!parseAnalyzerArg(m_argv[i+1]))
                 return false;
         }
         else if (strcmp(m_argv[i], "-f") == 0)
         {
             CHECK_ARG("-f", m_argv, i, m_argc);
-            ++i;
-            if (!parseTargetFiles(m_argv[i]))
+            if (!parseTargetFiles(m_argv[i+1]))
                 return false;
-
         }
+
+        else if (strcmp(m_argv[i], "-o") == 0)
+        {
+            CHECK_ARG("-o", m_argv, i, m_argc);
+            if (!parseOutputType(m_argv[i + 1]))
+                return false;
+        }
+
     }
 
+    if (m_output == nullptr)
+        m_output = std::make_shared<TerminalStrategy>();
     return true;
 }
 
@@ -195,14 +195,90 @@ bool TerminalInterface::parseTargetFiles(const char* arg)
         m_fileList.addFile(i);
     }
 
-    return false;
+    return true;
 }
 
+bool source_graph::TerminalInterface::parseOutputType(const char* arg)
+{
+    if (strcmp(arg, "stdout") == 0)
+        m_output = std::make_shared<TerminalStrategy>();
+    /*else if(strcmp(arg, "dot") == 0 || strcmp(arg, "graphviz") == 0)
+        m_output = std::make_shared<>();*/
+    else
+    {
+        std::cerr << "Unknown output type \"" << arg << "\". Valid options are 'stdout','dot', or 'graphviz'.\n";
+        return false;
+    }
+
+    return true;
+}
+
+// TODO: Figure out how to elimnate code dup. with fwd/rev analyzer
 bool TerminalInterface::runAnalyzer()
 {
+    TerminalStrategy os;
     if (hasFlag(m_analyzers, ANALYZER_FORWARD))
     {
+        if (m_fileList.getNumFiles() == 0)
+        {
+            os.writeForwardIncludes(
+                m_sourceList,
+                m_sourceList.getIndexList(),
+                m_igraph
+            );
 
+        }
+        else
+        {
+            os.writeForwardIncludes(
+                m_sourceList,
+                m_sourceList.getIndexListFromNames(m_fileList.getFileList()),
+                m_igraph
+            );
+        }
+    }
+
+    if (hasFlag(m_analyzers, ANALYZER_REVERSE))
+    {
+        if (m_fileList.getNumFiles() == 0)
+        {
+            os.writeReverseIncludes(
+                m_sourceList,
+                m_sourceList.getIndexList(),
+                m_igraph
+            );
+
+        }
+        else
+        {
+            os.writeReverseIncludes(
+                m_sourceList,
+                m_sourceList.getIndexListFromNames(m_fileList.getFileList()),
+                m_igraph
+            );
+        }
+    }
+
+    if (hasFlag(m_analyzers, ANALYZER_ICIRCLE) || hasFlag(m_analyzers, ANALYZER_TRANSIENT))
+    {
+        if (m_fileList.getNumFiles() != 2)
+        {
+            std::cerr << "icircle analysis requires exactly two files.\n";
+            return false;
+        }
+        CircularInclusionAnalyzer cia(m_sourceList, m_igraph);
+        FileIndexList ilist = m_sourceList.getIndexListFromNames(m_fileList.getFileList());
+        auto indexlist = cia.findIndirectCircularIncludes(ilist.front(), ilist.back(), 0);
+
+        if (hasFlag(m_analyzers, ANALYZER_TRANSIENT))
+            printf("%zd\n",indexlist.size());
+        else
+        {
+            os.writeTransitiveInclude(
+                m_sourceList,
+                indexlist
+            );
+        }
     }
 
     return true;

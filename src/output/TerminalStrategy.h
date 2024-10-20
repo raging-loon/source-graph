@@ -13,8 +13,8 @@ namespace source_graph
 class TerminalStrategy : public OutputStrategy
 {
 public:
-    void writeForwardIncludes(const FileList& sources, const IncludeGraph& graph) override;
-    void writeReverseIncludes(const FileList& sources, const IncludeGraph& graph) override;
+    void writeForwardIncludes(const FileList& sources, const FileIndexList& ilist, const IncludeGraph& graph) override;
+    void writeReverseIncludes(const FileList& sources, const FileIndexList& ilist, const IncludeGraph& graph) override;
     void writeTransitiveInclude(const FileList& sources, const FileIndexList& idx) override;
 
     

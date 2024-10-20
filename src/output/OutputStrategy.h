@@ -13,8 +13,8 @@ class OutputStrategy
 {
 public:
 
-    virtual void writeForwardIncludes(const FileList& sources, const IncludeGraph& graph) = 0;
-    virtual void writeReverseIncludes(const FileList& sources, const IncludeGraph& graph) = 0;
+    virtual void writeForwardIncludes(const FileList& sources, const FileIndexList& ilist, const IncludeGraph& graph) = 0;
+    virtual void writeReverseIncludes(const FileList& sources, const FileIndexList& ilist, const IncludeGraph& graph) = 0;
     virtual void writeTransitiveInclude(const FileList& sources, const FileIndexList& idx) = 0;
     
 private:

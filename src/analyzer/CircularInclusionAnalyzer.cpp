@@ -34,7 +34,7 @@ std::vector<int> CircularInclusionAnalyzer::findIndirectCircularIncludes(int fil
     std::vector<int> pathTofile2{};
     std::unordered_map<int, int> touched{};
     std::queue<int> frontier{};
-    printf("%s -> %s\n",m_sources[file1].string().c_str(), m_sources[file2].string().c_str());
+    //printf("%s -> %s\n",m_sources[file1].string().c_str(), m_sources[file2].string().c_str());
     touched.insert({ file1, file1 });
     frontier.push(file1);
 

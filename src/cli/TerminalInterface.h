@@ -4,6 +4,9 @@
 #include <string>
 #include "parser/FileList.h"
 #include "graph/IncludeGraph.h"
+
+#include "output/OutputStrategy.h"
+
 namespace source_graph
 {
 
@@ -24,7 +27,7 @@ public:
 
     TerminalInterface(int argc, char** argv)
         : m_argc(argc), m_argv(argv), m_oldcwd(std::filesystem::current_path()),
-          m_analyzers(0)
+        m_analyzers(0), m_output{}
     {
 
     }
@@ -50,6 +53,8 @@ private:
     /// parse a list of target files i.e -f <arg>
     bool parseTargetFiles(const char* arg);
 
+    bool parseOutputType(const char* arg);
+
     bool runAnalyzer();
 
 
@@ -71,6 +76,8 @@ private:
 
     /// analyzer to run
     unsigned int m_analyzers;
+
+    std::shared_ptr<OutputStrategy> m_output;
 };
 
 

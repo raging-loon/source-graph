@@ -10,14 +10,14 @@ void IncludeGraph::addInclude(uint fidx1, uint fidx2)
 
 std::optional<
     const VertexList
-> IncludeGraph::getFilesIncludedBy(int fidx)
+> IncludeGraph::getFilesIncludedBy(int fidx) const
 {
     return m_fwdIncGraph.getVertices(fidx);
 }
 
 std::optional<
     const VertexList
-> IncludeGraph::getFilesThatInclude(int fidx)
+> IncludeGraph::getFilesThatInclude(int fidx) const
 {
     return m_revIncGraph.getVertices(fidx);
 

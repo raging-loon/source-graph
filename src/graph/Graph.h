@@ -42,7 +42,7 @@ public:
     /// @return
     ///     std::nullopt on failure
     /// 
-    std::optional<const VertexList> getVertices(uint vertex);
+    std::optional<const VertexList> getVertices(uint vertex) const;
 
 private:
 

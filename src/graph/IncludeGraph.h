@@ -31,7 +31,7 @@ public:
     /// @return
     ///     std::nullopt on fail
     ///
-    std::optional<const VertexList> getFilesIncludedBy(int fidx);
+    std::optional<const VertexList> getFilesIncludedBy(int fidx) const;
 
 
     ///
@@ -41,7 +41,7 @@ public:
     /// @return
     ///     std::nullopt on fail
     ///
-    std::optional<const VertexList> getFilesThatInclude(int fidx);
+    std::optional<const VertexList> getFilesThatInclude(int fidx) const;
 
 private:
     /// What a file includes

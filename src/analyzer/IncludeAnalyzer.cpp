@@ -27,46 +27,49 @@ int IncludeAnalyzer::analyze()
             {
                 ++m_pdepFound;
                 char startChar, endChar;
-                if (line.find('"') != std::string::npos)
+                int soffset, eoffset = 0;
+                if (line.rfind('"') != std::string::npos)
                 {
                     startChar = '"';
                     endChar = '"';
+                    soffset = eoffset = 1;
                 }
                 else
                 {
+                    soffset = 0; eoffset = -1;
                     startChar = '<';
                     endChar = '>';
                 }
 
                 std::string incname = line.substr(
-                    line.find(startChar) + 1,
-                    line.rfind(endChar) - line.find(startChar) - 1
+                    line.find(startChar) + soffset,
+                    line.rfind(endChar) - line.find(startChar) - eoffset
                 );
                 if (endChar == '"')
                 {
                     if (exists(filename.parent_path().string() + "/" + incname))
                         incname = filename.parent_path().string() + "/" + incname;
                 }
-                
+#ifdef _WIN32
                 std::replace(incname.begin(), incname.end(), '/', '\\');
-
+#else
+                std::replace(incname.begin(), incname.end(), '\\', '/');
+#endif
                 int incIdx = 0;
                 for (auto& f : m_outList.getFileList())
                 {
                     if (f.string() == incname)
                     {
                         m_outGraph.addInclude(curFileIdx, incIdx);
+                        incIdx = -1;
                         break;
                     }
                     incIdx++;
                 }
-                if (incIdx == m_outList.getNumFiles())
+
+
+                if (incIdx != -1)
                 {
-                    if (!incname.ends_with(".h"))
-                    {
-                        ++m_systemHeadersFound;
-                        incname = "<" + incname + ">";
-                    }
                     m_outGraph.addInclude(curFileIdx, m_outList.getNumFiles());
                     m_outList.addFile(incname);
                 }

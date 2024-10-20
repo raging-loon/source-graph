@@ -29,7 +29,7 @@ bool Graph::hasEdges(uint vertex)
     return (m_adjacencyMap.find(vertex) != m_adjacencyMap.end());
 }
 
-std::optional<const VertexList> Graph::getVertices(uint vertex)
+std::optional<const VertexList> Graph::getVertices(uint vertex) const
 {
     auto place = m_adjacencyMap.find(vertex);
     if(place == m_adjacencyMap.end())

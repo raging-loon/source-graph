@@ -2,48 +2,44 @@
 #include <iostream>
 using namespace source_graph;
 
-//void TerminalStrategy::dumpForwardIncludes(FileList& files, FileList& sources, IncludeGraph& graph)
-//{
-//    auto indexList = sources.getIndexListFromNames(files.getFileList());
-//    for (auto& i : indexList)
-//    {
-//        std::cout << "Files included by " << sources[i] << "\n";
-//    
-//        auto inclist = graph.getFilesIncludedBy(i);
-//
-//        if (!inclist.has_value())
-//            std::cout << std::format("File {} has no includes or it is a system/lib file.\n", sources[i].string());
-//        else {
-//            for (auto& i : inclist.value())
-//                std::cout << "\t" << sources[i].string() << "\n";
-//        }
-//    }
-//}
-//
-//void TerminalStrategy::dumpReverseIncludes(FileList& files, FileList& sources, IncludeGraph& graph)
-//{
-//    auto indexList = sources.getIndexListFromNames(files.getFileList());
-//    for (auto& i : indexList)
-//    {
-//        std::cout << "Files that include " << sources[i].string() << "\n";
-//
-//        auto inclist = graph.getFilesThatInclude(i);
-//
-//        if (!inclist.has_value())
-//            std::cout << std::format("File {} is not included by any file.\n", sources[i].string());
-//        else {
-//            for (auto& i : inclist.value())
-//                std::cout << "\t" << sources[i].string() << "\n";
-//        }
-//    }
-//}
-
-void TerminalStrategy::writeForwardIncludes(const FileList& sources, const IncludeGraph& graph)
+void TerminalStrategy::writeForwardIncludes(const FileList& sources, const FileIndexList& ilist, const IncludeGraph& graph)
 {
+    for (auto i : ilist)
+    {
+        auto list = graph.getFilesIncludedBy(i);
+        int amnt = printf("---- %s ----\n", sources[i].string().c_str());
+        if (!list.has_value())
+        {
+            std::cerr << sources[i].string() << " has no detected includes, or it is a library/system file\n";
+        }
+        else
+        {
+            std::cerr << "Includes: \n";
+            for (auto idx : list.value())
+                std::cerr << std::format("\t{}\n", sources[idx].string());
+        }
+        std::cerr << std::string(amnt - 1, '-') << '\n';
+    }
 }
 
-void TerminalStrategy::writeReverseIncludes(const FileList& sources, const IncludeGraph& graph)
+void TerminalStrategy::writeReverseIncludes(const FileList& sources, const FileIndexList& ilist, const IncludeGraph& graph)
 {
+    for (auto i : ilist)
+    {
+        auto list = graph.getFilesThatInclude(i);
+        int amnt = printf("---- %s ----\n", sources[i].string().c_str());
+        if (!list.has_value())
+        {
+            std::cerr << sources[i].string() << " is not included by any file\n";
+        }
+        else
+        {
+            std::cerr << "Included by: \n";
+            for (auto idx : list.value())
+                std::cerr << std::format("\t{}\n", sources[idx].string());
+        }
+        std::cerr << std::string(amnt - 1, '-') << '\n';
+    }
 }
 
 void TerminalStrategy::writeTransitiveInclude(const FileList& sources, const FileIndexList& idx)
